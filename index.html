@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator HPP - Harga Pokok Penjualan</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-content">
+        <h1>📊 Kalkulator HPP</h1>
+        <ul class="nav-links">
+          <li>
+            <a href="#kalkulator" onclick="showSection('kalkulator')"
+              >Kalkulator HPP</a
+            >
+          </li>
+          <li>
+            <a href="#riwayat" onclick="showSection('riwayat')">Riwayat</a>
+          </li>
+          <li>
+            <a href="#tentang" onclick="showSection('tentang')">Tentang</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="container">
+      <section id="kalkulator" class="active-section">
+        <h2>Kalkulator Harga Pokok Penjualan (HPP)</h2>
+
+        <div class="card instruksi-card">
+          <h3 onclick="toggleInstruksi(this)">
+            Cara Menggunakan 💡 (Klik untuk Buka/Tutup)
+          </h3>
+          <div class="instruksi-content">
+            <ol>
+              <li>Isi **Nama Produk** untuk identifikasi.</li>
+              <li>
+                Masukkan biaya **Bahan Baku** dan **Biaya Lain-Lain** (klik
+                tombol '+' untuk menambah baris).
+              </li>
+              <li>
+                Isi **Total Biaya Tenaga Kerja** dan **Jumlah Unit Produksi**.
+              </li>
+              <li>Klik **'Hitung HPP'** untuk melihat hasilnya.</li>
+              <li>
+                Isi **Margin Laba** (persen) dan klik **'Hitung Harga Jual'**.
+              </li>
+              <li>
+                Gunakan tombol **'Simpan ke Riwayat'** dan **'Export PDF'**.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <form id="hpp-form" class="card form-card">
+          <h3>Detail Produk & Unit</h3>
+          <label for="productName">Nama Produk:</label>
+          <input
+            type="text"
+            id="productName"
+            placeholder="Contoh: Kue Cokelat (500g)"
+            required
+          />
+
+          <label for="jumlahUnit">Jumlah Unit Produksi:</label>
+          <input
+            type="number"
+            id="jumlahUnit"
+            min="1"
+            placeholder="Cth: 100"
+            required
+          />
+
+          <h3>1. Biaya Bahan Baku (BB)</h3>
+          <div id="bahanBakuContainer" class="dynamic-input-container"></div>
+          <button
+            type="button"
+            class="btn-tambah"
+            onclick="addItemRow('bahanBaku', 'BB', 1)"
+          >
+            + Tambah Bahan Baku
+          </button>
+          <p class="total-summary">
+            Total Biaya Bahan Baku: <span id="totalBahanBakuDisplay">Rp 0</span>
+          </p>
+
+          <h3>2. Biaya Tenaga Kerja Langsung (BTKL)</h3>
+          <label for="biayaTenagaKerja">Total Biaya Tenaga Kerja:</label>
+          <input
+            type="number"
+            id="biayaTenagaKerja"
+            min="0"
+            placeholder="Rp Total Gaji & Upah"
+            required
+          />
+          <p class="total-summary">
+            Total Biaya Tenaga Kerja:
+            <span id="totalTenagaKerjaDisplay">Rp 0</span>
+          </p>
+
+          <h3>3. Biaya Overhead Pabrik (BOP) / Lain-lain</h3>
+          <div
+            id="biayaLainLainContainer"
+            class="dynamic-input-container"
+          ></div>
+          <button
+            type="button"
+            class="btn-tambah"
+            onclick="addItemRow('biayaLainLain', 'BOP', 1)"
+          >
+            + Tambah Biaya Lain-lain
+          </button>
+          <p class="total-summary">
+            Total Biaya Lain-Lain: <span id="totalLainLainDisplay">Rp 0</span>
+          </p>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-hitung">Hitung HPP</button>
+            <button type="button" class="btn-reset" onclick="resetForm()">
+              Reset Form
+            </button>
+          </div>
+        </form>
+
+        <div
+          id="hasil-perhitungan"
+          class="card result-card hidden"
+          style="margin-top: 20px"
+        >
+          <h3>Hasil Perhitungan HPP</h3>
+          <div id="ringkasan-angka" class="summary-grid">
+            <div class="summary-item">
+              Total Biaya Produksi:
+              <span id="outputTotalBiaya" class="counter">0</span>
+            </div>
+            <div class="summary-item main-result">
+              HPP per Unit: <span id="outputHPPUnit" class="counter">0</span>
+            </div>
+          </div>
+
+          <div class="harga-jual-section">
+            <h4>Hitung Harga Jual Saran</h4>
+            <label for="marginLaba">Margin Laba yang Diinginkan (%) :</label>
+            <input
+              type="number"
+              id="marginLaba"
+              min="0"
+              max="100"
+              placeholder="Cth: 20"
+              value="20"
+            />
+            <button
+              type="button"
+              class="btn-margin"
+              onclick="hitungHargaJual()"
+            >
+              Hitung Harga Jual
+            </button>
+            <div class="harga-jual-output hidden">
+              Harga Jual Saran per Unit (Margin
+              <span id="marginPersenOutput">0</span>%):
+              <span id="outputHargaJual" class="counter">0</span>
+            </div>
+          </div>
+
+          <hr />
+
+          <h4>Ringkasan Komposisi Biaya Produksi</h4>
+          <div class="table-container">
+            <table id="tabel-ringkasan-biaya">
+              <thead>
+                <tr>
+                  <th>Komponen Biaya</th>
+                  <th>Total Biaya</th>
+                  <th>Persentase</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Bahan Baku (BB)</td>
+                  <td id="ringkasanBB">Rp 0</td>
+                  <td id="persenBB">0%</td>
+                </tr>
+                <tr>
+                  <td>Tenaga Kerja (BTKL)</td>
+                  <td id="ringkasanBTKL">Rp 0</td>
+                  <td id="persenBTKL">0%</td>
+                </tr>
+                <tr>
+                  <td>Overhead (BOP)</td>
+                  <td id="ringkasanBOP">Rp 0</td>
+                  <td id="persenBOP">0%</td>
+                </tr>
+                <tr class="total-row">
+                  <td>TOTAL</td>
+                  <td id="ringkasanTOTAL">Rp 0</td>
+                  <td>100%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>Grafik Komposisi Biaya</h4>
+          <div class="chart-container">
+            <canvas id="biayaChart"></canvas>
+          </div>
+
+          <div class="result-actions">
+            <button
+              type="button"
+              class="btn-export"
+              onclick="simpanKeRiwayat()"
+            >
+              💾 Simpan ke Riwayat
+            </button>
+            <button type="button" class="btn-export" onclick="exportToPDF()">
+              📄 Export ke PDF
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="riwayat" class="hidden-section">
+        <h2>Riwayat Perhitungan HPP</h2>
+        <div id="riwayat-list" class="riwayat-list-container">
+          <p id="riwayat-kosong">
+            Belum ada riwayat tersimpan. Silakan hitung HPP terlebih dahulu.
+          </p>
+        </div>
+      </section>
+
+      <section id="tentang" class="hidden-section">
+        <h2>Tentang Aplikasi Kalkulator HPP</h2>
+        <div class="card">
+          <p>
+            Aplikasi ini dirancang untuk membantu UMKM atau individu menghitung
+            Harga Pokok Penjualan (HPP) per unit produk berdasarkan standar
+            akuntansi biaya produksi (Biaya Bahan Baku + Biaya Tenaga Kerja +
+            Biaya Overhead).
+          </p>
+          <p><strong>Fitur Utama:</strong></p>
+          <ul>
+            <li>Perhitungan HPP akurat.</li>
+            <li>Input biaya dinamis (bahan baku & biaya lain-lain).</li>
+            <li>Perhitungan harga jual saran berdasarkan margin laba.</li>
+            <li>Penyimpanan riwayat lokal menggunakan `localStorage`.</li>
+            <li>Visualisasi komposisi biaya dengan grafik (Chart.js).</li>
+            <li>Export hasil perhitungan ke format PDF (jsPDF).</li>
+            <li>Desain responsif dan modern.</li>
+          </ul>
+          <p>Dibuat dengan ❤️ menggunakan HTML, CSS, dan JavaScript.</p>
+          <p
+            style="
+              margin-top: 20px;
+              border-top: 1px solid #ccc;
+              padding-top: 10px;
+            "
+          >
+            *Aplikasi ini adalah frontend-only. Untuk sinkronisasi multi-user,
+            diperlukan integrasi backend (mis. Firebase, MySQL, dll.). Lihat
+            komentar di file <code>script.js</code> untuk titik integrasi.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

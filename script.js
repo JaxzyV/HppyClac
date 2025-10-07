@@ -90,20 +90,20 @@ function toggleInstruksi(header) {
  */
 function fillDummyData() {
   document.getElementById("productName").value = "";
-  document.getElementById("jumlahUnit").value = 0;
-  document.getElementById("biayaTenagaKerja").value = 0;
+  document.getElementById("jumlahUnit").value = "";
+  document.getElementById("biayaTenagaKerja").value = "";
 
   // Clear existing dynamic inputs
   document.getElementById("bahanBakuContainer").innerHTML = "";
   document.getElementById("biayaLainLainContainer").innerHTML = "";
 
   // Dummy Bahan Baku
-  addItemRow("bahanBaku", "BB", 0, "");
-  addItemRow("bahanBaku", "BB", 0, "");
+  addItemRow("bahanBaku", "BB", "", "");
+  addItemRow("bahanBaku", "BB", "", "");
 
   // Dummy Biaya Lain-lain / Overhead
-  addItemRow("biayaLainLain", "BOP", 0, "");
-  addItemRow("biayaLainLain", "BOP", 0, "");
+  addItemRow("biayaLainLain", "BOP", "", "");
+  addItemRow("biayaLainLain", "BOP", "", "");
 
   // Update total untuk data dummy
   updateTotalSummary("bahanBaku");

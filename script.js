@@ -759,14 +759,14 @@ function exportToPDF() {
     return;
   }
 
-  // Gunakan jsPDF dan html2canvas
+  // Cara yang benar
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  // Data utama
   const data = currentCalculation;
-
   let y = 15;
+
+  // dst...
 
   // Judul
   doc.setFontSize(18);
@@ -862,7 +862,7 @@ function exportToPDF() {
   // Pindah y ke akhir tabel
   y = doc.autoTable.previous.finalY + 10;
 
-  // Tangkap Grafik (Opsional, jika ingin menyertakan gambar grafik)
+  // Tangkap grafik (Opsional, jika ingin menyertakan gambar grafik)
   const chartCanvas = document.getElementById("biayaChart");
   if (chartCanvas) {
     doc.setFontSize(12);

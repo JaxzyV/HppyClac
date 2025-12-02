@@ -12,23 +12,125 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
-    <nav class="navbar">
-      <div class="container nav-content">
-        <h1>HPPyCalc</h1>
-        <ul class="nav-links">
-          <li>
-            <a href="#kalkulator" onclick="showSection('kalkulator')"
-              >Kalkulator HPP</a
-            >
-          </li>
-          <li>
-            <a href="#riwayat" onclick="showSection('riwayat')">Riwayat</a>
-          </li>
-          <li>
-            <a href="#tentang" onclick="showSection('tentang')">Tentang</a>
-          </li>
-        </ul>
-      </div>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HppyClac Navigasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration for HppyClac Theme */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'hppy-blue': '#87CEEB', /* Sky Blue */
+                        'hppy-white': '#FFFFFF', /* Snow White */
+                        'hppy-dark': '#2c3e50', /* Darker accent for text/links */
+                    },
+                }
+            }
+        }
+        /* Ensure no horizontal scrollbar */
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="bg-blue-500 shadow-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <img
+                        src="logoCashup.png"
+                        class="w-13 h-13 rounded-full border-2 border-hppy-blue"
+                        alt="HppyClac Logo"
+                    />
+                    <h1 class="text-white text-3xl font-extrabold hover:text-hppy-blue transition duration-300">
+                        HPPyCalc
+                    </h1>
+                </div>
+
+                <ul class="hidden md:flex space-x-8 text-hppy-dark font-semibold nav-links text-lg">
+                    <li>
+                        <a href="#kalkulator" onclick="showSection('kalkulator')"
+                            class="hover:text-hppy-blue transition duration-300 py-2 border-b-2 border-transparent hover:border-hppy-blue"
+                        >
+                            Kalkulator HPP
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#riwayat" onclick="showSection('riwayat')"
+                            class="hover:text-hppy-blue transition duration-300 py-2 border-b-2 border-transparent hover:border-hppy-blue"
+                        >
+                            Riwayat
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tentang" onclick="showSection('tentang')"
+                            class="hover:text-hppy-blue transition duration-300 py-2 border-b-2 border-transparent hover:border-hppy-blue"
+                        >
+                            Tentang
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="md:hidden">
+                    <button
+                        id="mobile-menu-button"
+                        class="text-hppy-dark p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-hppy-blue transition duration-300"
+                        aria-label="Toggle Menu"
+                    >
+                        <svg
+                            class="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+            <ul class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-hppy-dark bg-gray-50">
+                <li>
+                    <a
+                        href="#kalkulator"
+                        onclick="showSectionAndHideMenu('kalkulator')"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-hppy-blue hover:text-white transition duration-300"
+                    >
+                        Kalkulator HPP
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="#riwayat"
+                        onclick="showSectionAndHideMenu('riwayat')"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-hppy-blue hover:text-white transition duration-300"
+                    >
+                        Riwayat
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="#tentang"
+                        onclick="showSectionAndHideMenu('tentang')"
+                        class="block px-3 py-2 rounded-md text-base font-medium hover:bg-hppy-blue hover:text-white transition duration-300"
+                    >
+                        Tentang
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
     <main class="container">
@@ -251,21 +353,44 @@
             <li>Desain responsif dan modern.</li>
           </ul>
           <p>Dibuat dengan ❤️ menggunakan HTML, CSS, dan JavaScript.</p>
-          <p
-            style="
-              margin-top: 20px;
-              border-top: 1px solid #ccc;
-              padding-top: 10px;
-            "
-          >
-            *Aplikasi ini adalah frontend-only. Untuk sinkronisasi multi-user,
-            diperlukan integrasi backend (mis. Firebase, MySQL, dll.). Lihat
-            komentar di file <code>script.js</code> untuk titik integrasi.
-          </p>
         </div>
       </section>
     </main>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      // Function to toggle the mobile menu visibility
+      mobileMenuButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Modified showSection function to handle menu closing on mobile
+      function showSectionAndHideMenu(sectionId) {
+        // Your existing logic to show the section (assuming showSection function is defined elsewhere)
+        if (typeof showSection === "function") {
+          showSection(sectionId);
+        } else {
+          console.warn("The showSection function is not defined.");
+        }
+
+        // Hide the mobile menu after clicking a link
+        if (!mobileMenu.classList.contains("hidden")) {
+          mobileMenu.classList.add("hidden");
+        }
+      }
+
+      // You should ensure that your original showSection function is defined like this:
+      /*
+    function showSection(sectionId) {
+        // Logic to hide all sections and show the selected one
+        console.log('Showing section: ' + sectionId); 
+        // Example: document.getElementById(sectionId).style.display = 'block';
+    }
+    */
+    </script>
   </body>
 </html>
